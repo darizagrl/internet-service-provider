@@ -1,4 +1,4 @@
-package springboot.registration_form.entity;
+package springboot.entity;
 
 public class User {
     private static final long serialVersionUID = 1L;

@@ -1,4 +1,4 @@
-package springboot.registration_form.dto;
+package springboot.dto;
 
 import lombok.*;
 

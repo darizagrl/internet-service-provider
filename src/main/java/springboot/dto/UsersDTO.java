@@ -1,7 +1,7 @@
-package springboot.registration_form.dto;
+package springboot.dto;
 
 import lombok.*;
-import springboot.registration_form.entity.User;
+import springboot.entity.User;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package springboot.registration_form.entity;
+package springboot.entity;
 
 public enum Role {
     ADMIN,
