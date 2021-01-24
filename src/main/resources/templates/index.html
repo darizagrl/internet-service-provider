@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+<h1 th:inline="text">Welcome</h1>
+<div>
+    <span th:text="#{lang.change}"></span>
+    <a href="/index?lang=ua">UA</a>
+    <a href="/index?lang=en">ENG</a>
+</div>
+</body>
+</html>
