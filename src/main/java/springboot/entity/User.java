@@ -1,68 +1,50 @@
 package springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
-    private static final long serialVersionUID = 1L;
-    private String login;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String surname;
-    private boolean blocked;
-    private int roleId;
-
-    public String getLogin() {
-        return login;
+    public User() {
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    @Id
+    @Column(name = "id")
+    @SequenceGenerator(name = "usersIdSeq", sequenceName = "users_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersIdSeq")
+    private Integer id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getName() {
+        return name;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getEmail() {
+        return email;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
