@@ -37,12 +37,14 @@ public class HomeController {
         model.addAttribute("user", user);
         return "new_user";
     }
+
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
         // save user to database
         userService.saveUser(user);
         return "redirect:/main";
     }
+
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) {
 

@@ -1,30 +1,43 @@
 package springboot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import springboot.dto.NoteDTO;
-import springboot.service.RegFormService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
-@RequestMapping(value = "/api")
+import springboot.entity.User;
+import springboot.service.UserService;
+import springboot.dto.UserDTO;
+
+import javax.validation.Valid;
+
+@Controller
+@RequestMapping("/registration")
 public class RegFormController {
-
-    private final RegFormService regFormService;
-
     @Autowired
-    public RegFormController(RegFormService regFormService) {
-        this.regFormService = regFormService;
+    private UserService userService;
+
+//    public RegFormController(UserService userService) {
+//        this.userService = userService;
+//    }
+
+    @ModelAttribute("user")
+    public UserDTO userDTO() {
+        return new UserDTO();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/reg_form", method = RequestMethod.POST)
-    public void registrationFormController(NoteDTO note) {
+    @GetMapping
+    public String registration(Model model) {
+        model.addAttribute("user", new UserDTO());
+        return "registration";
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    @PostMapping()
+    public String registerUserAccount(@ModelAttribute("user") @Valid UserDTO userDTO) {
+        userService.save(userDTO);
+        return "redirect:/registration?success";
     }
 }

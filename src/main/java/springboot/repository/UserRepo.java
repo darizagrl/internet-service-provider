@@ -6,4 +6,6 @@ import springboot.entity.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
+    User findByEmail(String email);
+    User findByName(String name);
 }

@@ -9,6 +9,9 @@
 </head>
 <body>
 <div class="container my-2">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" class="btn btn-danger"value="Sign Out"/>
+    </form>
     <h1 th:text="#{users.list}"></h1>
     <a th:href="@{/showNewUserForm}" class="btn btn-primary btn-sm mb-3" th:text="#{user.add}"></a>
 
