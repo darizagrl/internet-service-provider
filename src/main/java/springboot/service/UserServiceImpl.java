@@ -1,6 +1,9 @@
 package springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,27 +15,23 @@ import springboot.entity.Role;
 import springboot.entity.User;
 import springboot.repository.UserRepo;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
+    private UserRepo userRepo;
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    private final UserRepo userRepo;
-
-    public User findByEmail(String email) {
-        return userRepo.findByEmail(email);
-    }
-
-    public UserServiceImpl(UserRepo userRepo) {
-        super();
-        this.userRepo = userRepo;
-    }
 
     @Override
-    public void create(User user) {
-        userRepo.save(user);
+    public User findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(int id) {
         Optional<User> optional = userRepo.findById(id);
-        User user;
+        User user = null;
         if (optional.isPresent()) {
             user = optional.get();
         } else {
@@ -65,7 +64,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(UserDTO registration) {
         User user = new User();
-        user.setName(registration.getName());
+        user.setFirstname(registration.getFirstname());
+        user.setLastname(registration.getLastname());
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
         user.setRoles(Arrays.asList(new Role("ROLE_USER")));
@@ -78,11 +78,20 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException("No user found for " + email + ".");
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(toList());
     }
 
+    @Override
+    public Page<User> findPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.userRepo.findAll(pageable);
+    }
 }

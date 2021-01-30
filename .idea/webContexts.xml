@@ -4,6 +4,8 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/resources/templates/error.html" value="file://$PROJECT_DIR$/src/main/resources/templates" />
+        <entry key="file://$PROJECT_DIR$/src/main/resources/templates/index.html" value="file://$PROJECT_DIR$/src/main/resources/templates" />
+        <entry key="file://$PROJECT_DIR$/src/main/resources/templates/main.html" value="file://$PROJECT_DIR$/src/main/resources/templates" />
         <entry key="file://$PROJECT_DIR$/src/main/resources/templates/registration.html" value="file://$PROJECT_DIR$/src/main/resources/templates" />
         <entry key="file://$PROJECT_DIR$/src/main/resources/templates/update_user.html" value="file://$PROJECT_DIR$/src/main/resources/templates" />
       </map>

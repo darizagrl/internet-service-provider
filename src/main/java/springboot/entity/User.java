@@ -10,14 +10,25 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(Integer id, String firstname, String lastname, String email, String password, Collection<Role> roles) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(String firstname, String lastname, String email, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
     }
 
-    public User(String name, String email, String password, Collection<Role> roles) {
-        this.name = name;
+    public User(String firstname, String lastname, String email, String password, Collection<Role> roles) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -28,16 +39,14 @@ public class User {
     @SequenceGenerator(name = "usersIdSeq", sequenceName = "users_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersIdSeq")
     private Integer id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
+    @Column(name = "firstname", nullable = false)
+    private String firstname;
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
     @Column(name = "email", nullable = false)
     private String email;
-
     @Column(name = "password", nullable = false)
     private String password;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -54,14 +63,21 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
     public String getEmail() {
         return email;
     }
@@ -90,7 +106,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + "*********" + '\'' +
                 ", role=" + roles +

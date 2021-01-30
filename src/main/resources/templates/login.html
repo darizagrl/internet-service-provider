@@ -24,32 +24,38 @@
         </div>
     </div>
 </nav>
+
 <br>
 <br>
+
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <!-- error -->
-            <div th:if="${param.error}">
-                <div class="alert alert-dander">Invalid username and password.</div>
-            </div>
-            <!-- logout -->
-            <div th:if="${param.logout}">
-                <div class="alert alert-info"> You have been logged out.</div>
-            </div>
             <h1>Sign In</h1>
             <form th:action="@{/login}" method="post">
+                <!-- error -->
+                <div th:if="${param.error}">
+                    <div class="alert alert-dander">Invalid username and password.</div>
+                </div>
+                <div th:if="${param.success}">
+                    <div class="alert alert-info">You have logged in.</div>
+                </div>
+                <!-- logout -->
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info"> You have been logged out.</div>
+                </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control" type="email" id="email" name="email"
-                           placeholder="Enter Email"
-                           required autofocus="autofocus"/>
+                    <input type="text"
+                           id="email" name="email" class="form-control"
+                           autofocus="autofocus" placeholder="Enter Email"/>
                 </div>
                 <div class="form-group">
                     <label for="password"> Password </label>
-                    <input class="form-control" type="password" id="password" name="password"
-                           placeholder="Enter Password"
-                           required autofocus="autofocus">
+                    <input type="password"
+                           id="password" name="password"
+                           class="form-control"
+                           placeholder="Enter Password"/>
                 </div>
                 <div class="form-group">
                     <div class="row">
@@ -66,5 +72,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript"
+        th:src="@{/webjars/jquery/3.5.1/jquery.min.js/}"></script>
+<script type="text/javascript"
+        th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

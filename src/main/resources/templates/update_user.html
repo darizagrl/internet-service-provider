@@ -21,8 +21,8 @@
         <!-- Add hidden form field to handle update -->
         <input type="hidden" th:field="*{id}"/>
 
-        <input type="text" th:field="*{name}" class="form-control mb-4 col-4">
-
+        <input type="text" th:field="*{firstname}" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{lastname}" class="form-control mb-4 col-4">
         <input type="text" th:field="*{email}" class="form-control mb-4 col-4">
 
         <button type="submit" class="btn btn-info col-4" th:text="#{user.update}"></button>
