@@ -78,6 +78,7 @@ public class User {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+
     public String getEmail() {
         return email;
     }
@@ -85,7 +86,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getPassword() {
         return password;
     }

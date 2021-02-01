@@ -13,6 +13,7 @@ import springboot.entity.User;
 import springboot.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/registration")
@@ -28,8 +29,8 @@ public class RegFormController {
 
     @PostMapping()
     public String registerUserAccount(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult result) {
-        User existing = userService.findByEmail(userDTO.getEmail());
-        if (existing != null) {
+        Optional<User> existing = userService.findByEmail(userDTO.getEmail());
+        if (existing.isPresent()) {
             result.rejectValue("email", null, "There is already an account registered with that email");
         }
         if (result.hasErrors()) {

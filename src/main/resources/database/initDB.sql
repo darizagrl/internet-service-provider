@@ -1,8 +1,8 @@
--- DROP TABLE IF EXISTS users cascade;
--- DROP TABLE IF EXISTS users_roles;
--- DROP TABLE IF EXISTS role;
--- DROP SEQUENCE IF EXISTS users_id_seq;
--- DROP SEQUENCE IF EXISTS roles_id_seq;
+DROP TABLE IF EXISTS users cascade;
+DROP TABLE IF EXISTS users_roles;
+DROP TABLE IF EXISTS role;
+DROP SEQUENCE IF EXISTS users_id_seq;
+DROP SEQUENCE IF EXISTS roles_id_seq;
 CREATE TABLE if not exists users
 (
     id        INTEGER PRIMARY KEY,

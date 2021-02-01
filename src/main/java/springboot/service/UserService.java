@@ -6,11 +6,12 @@ import springboot.dto.UserDTO;
 import springboot.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
     User save(UserDTO userDTO);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     List<User> getAllUsers();
 

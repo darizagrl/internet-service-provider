@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import springboot.dto.UserDTO;
 import springboot.entity.User;
 import springboot.service.UserService;
 
@@ -19,14 +18,9 @@ public class LoginController {
         return "login";
     }
 
-//    @GetMapping("/login?success")
-//    public String userIndex() {
-//        return "main";
-//    }
-
-    @GetMapping("/user")
+    @GetMapping("/login?success")
     public String userIndex() {
-        return "user/main";
+        return "main";
     }
 
     @ModelAttribute("user")
