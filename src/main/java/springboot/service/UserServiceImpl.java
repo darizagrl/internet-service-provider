@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import springboot.dto.UserDTO;
 import springboot.entity.MyUserDetails;
 import springboot.entity.Role;
+import springboot.entity.Tariff;
 import springboot.entity.User;
 import springboot.repository.UserRepo;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        return this.userRepo.findAll();
     }
 
     @Override
@@ -43,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(int id) {
         Optional<User> optional = userRepo.findById(id);
-        User user = null;
+        User user;
         if (optional.isPresent()) {
             user = optional.get();
         } else {
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.setLastname(registration.getLastname());
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
-        user.setRoles(Arrays.asList(new Role("ROLE_USER")));
+        user.setRoles(Collections.singletonList(new Role("ROLE_USER")));
         return userRepo.save(user);
     }
 
@@ -75,6 +77,17 @@ public class UserServiceImpl implements UserService {
         return user.map(MyUserDetails::new).get();
     }
 
+    @Override
+    public Set<Tariff> findUserTariffs(int id) {
+        Optional<User> optional = userRepo.findById(id);
+        User user;
+        if (optional.isPresent()) {
+            user = optional.get();
+        } else {
+            throw new RuntimeException("User not found for id :: " + id);
+        }
+        return user.getTariffs();
+    }
     @Override
     public Page<User> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);

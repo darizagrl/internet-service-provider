@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="internet-service-provider:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/internet_service_provider_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="internet-service-provider/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="internet-service-provider" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity3">
+<table boarder="1" class="table table-striped table-responsive-md">
+    <thead>
+    <tr>
+        <th th:text="#{tariff.name}"></th>
+        <th th:text="#{tariff.description}"></th>
+        <th th:text="#{tariff.price}"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tariff : ${tvTariffList}">
+        <td th:text="${tariff.name}"></td>
+        <td th:text="${tariff.description}"></td>
+        <td th:text="${tariff.price}"></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/deleteTariff/{id}(id=${tariff.idTariff})}" class="btn btn-danger"
+               th:text="#{user.delete}"></a></td>
+        <td>
+            <!--                <a th:href="@{/showFormForUpdate/{id}(id=${user.id})}" class="btn btn-primary"-->
+            <!--                   th:text="#{user.update}"></a>-->
+            <!--                <a th:href="@{/deleteUser/{id}(id=${user.id})}" class="btn btn-danger" th:text="#{user.delete}"></a>-->
+        </td>
+    </tr>
+    </tbody>
+</table>

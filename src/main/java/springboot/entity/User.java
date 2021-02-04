@@ -3,6 +3,7 @@ package springboot.entity;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -33,6 +34,15 @@ public class User {
         this.password = password;
         this.roles = roles;
     }
+    public User(String firstname, String lastname, String email, String password, Collection<Role> roles, Set<Tariff> tariffs, Account account) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.tariffs = tariffs;
+        this.account = account;
+    }
 
     @Id
     @Column(name = "id")
@@ -54,6 +64,16 @@ public class User {
                     name = "role_id", referencedColumnName = "id"
             ))
     private Collection<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_tariffs",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "tariff_id", referencedColumnName = "id"
+            ))
+    private Set<Tariff> tariffs;
+    @OneToOne
+    @JoinTable(name = "account", joinColumns = @JoinColumn(name = "account_id"))
+    private Account account;
 
     public Integer getId() {
         return id;
@@ -86,6 +106,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
@@ -101,6 +122,20 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+    public Set<Tariff> getTariffs() {
+        return tariffs;
+    }
+
+    public void setTariffs(Set<Tariff> tariffs) {
+        this.tariffs = tariffs;
+    }
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     @Override
     public String toString() {
@@ -109,8 +144,10 @@ public class User {
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + "*********" + '\'' +
-                ", role=" + roles +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", tariffs=" + tariffs +
+                ", account=" + account +
                 '}';
     }
 }
