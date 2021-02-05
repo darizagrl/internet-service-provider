@@ -8,20 +8,16 @@ import java.util.Objects;
 public class Account {
     @Id
     @Column(name = "account_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinTable(name = "users",
+            joinColumns = @JoinColumn(name = "id", referencedColumnName = "account_id"))
     private Integer idAccount;
 
     @Column(name = "account")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long account;
 
     @Column(name = "balance")
     private Double balance;
-
-    public Account(Integer idAccount, Long account, Double balance) {
-        this.idAccount = idAccount;
-        this.account = account;
-        this.balance = balance;
-    }
 
     public Account(Long account, Double balance) {
         this.account = account;

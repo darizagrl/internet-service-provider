@@ -1,9 +1,6 @@
 package springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
@@ -16,11 +13,6 @@ import java.util.Optional;
 public class TariffServiceImpl implements TariffService {
     @Autowired
     private TariffRepo tariffRepo;
-
-    @Override
-    public List<Tariff> getAllTariffs() {
-        return this.tariffRepo.findAll();
-    }
 
     @Override
     public List<Tariff> getAllTariffsByType(String type) {
@@ -39,7 +31,6 @@ public class TariffServiceImpl implements TariffService {
         return tariff;
     }
 
-
     @Override
     public Tariff addTariff(TariffDTO tariffDTO) {
         Tariff tariff = new Tariff();
@@ -48,17 +39,10 @@ public class TariffServiceImpl implements TariffService {
         tariff.setPrice(tariffDTO.getPrice());
         tariff.setType(tariffDTO.getType());
         return tariffRepo.save(tariff);
-
     }
 
     @Override
     public void deleteTariff(int id) {
         this.tariffRepo.deleteById(id);
-    }
-
-    @Override
-    public Page<Tariff> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return this.tariffRepo.findAll(pageable);
     }
 }

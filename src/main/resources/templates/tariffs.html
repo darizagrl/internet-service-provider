@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="flag-icon" href="/static/css/flag-icon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css"
+          integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw=="
+          crossorigin="anonymous"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
@@ -27,6 +29,11 @@
                 <a th:href="@{/main}"><i class="fa fa-users" aria-hidden="true"></i></a>
             </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="flag-icon flag-icon-ua" href="/tariffs?lang=ua"></a></li>
+            <li>&nbsp;&nbsp;</li>
+            <li><a class="flag-icon flag-icon-us" href="/tariffs?lang=en"></a></li>
+        </ul>
     </div>
 </nav>
 <div class="p-5 text-center bg-image"
@@ -37,7 +44,12 @@
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{/showNewTariff}" class="btn btn-primary btn-sm mb-3" th:text="#{tariff.add}"></a>
     </div>
-
+    <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully subscribed</div>
+    </div>
+    <div th:if="${param.error}">
+        <div class="alert alert-info">Insufficient funds</div>
+    </div>
     <div class="container">
 
         <div class="row">
@@ -59,10 +71,6 @@
             </div>
         </div>
     </div>
-    <hr>
-    <span th:text="#{lang.change}"></span>
-    <a href="/tariffs?lang=ua">UA</a>
-    <a href="/tariffs?lang=en">ENG</a>
 </div>
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>

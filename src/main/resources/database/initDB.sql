@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS users
     firstname VARCHAR(255)        NOT NULL,
     lastname  VARCHAR(255)        NOT NULL,
     email     VARCHAR(255) UNIQUE NOT NULL,
-    password  VARCHAR(255)        NOT NULL
+    password  VARCHAR(255)        NOT NULL,
+    balance NUMERIC
 );
 CREATE TABLE IF NOT EXISTS role
 (
@@ -49,8 +50,8 @@ CREATE TABLE IF NOT EXISTS users_tariffs
 (
     user_id   INTEGER NOT NULL,
     tariff_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (tariff_id) REFERENCES tariff (id)
+    FOREIGN KEY (tariff_id) REFERENCES tariff (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE SEQUENCE IF NOT EXISTS users_id_seq START WITH 3 INCREMENT BY 1;

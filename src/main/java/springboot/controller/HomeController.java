@@ -28,12 +28,12 @@ public class HomeController {
         return "redirect:/registration";
     }
 
-//    @GetMapping("/deleteUser/{id}")
-//    public String deleteUser(@PathVariable(value = "id") int id) {
-//        // call delete user method
-//        this.userService.deleteUserById(id);
-//        return "redirect:/index";
-//    }
+    @GetMapping("/deleteUser/{id}")
+    public String deleteUser(@PathVariable(value = "id") int id) {
+        // call delete user method
+        this.userService.deleteUserById(id);
+        return "redirect:/index";
+    }
 
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {

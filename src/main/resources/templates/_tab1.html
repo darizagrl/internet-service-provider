@@ -4,9 +4,9 @@
 <table boarder="1" class="table table-striped table-responsive-md">
     <thead>
     <tr>
-        <th th:text="#{tariff.name}"></th>
-        <th th:text="#{tariff.description}"></th>
-        <th th:text="#{tariff.price}"></th>
+        <th scope="col" th:text="#{tariff.name}"></th>
+        <th scope="col" th:text="#{tariff.description}"></th>
+        <th scope="col" th:text="#{tariff.price}"></th>
     </tr>
     </thead>
     <tbody>
@@ -14,8 +14,33 @@
         <td th:text="${tariff.name}"></td>
         <td th:text="${tariff.description}"></td>
         <td th:text="${tariff.price}"></td>
-        <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/deleteTariff/{id}(id=${tariff.idTariff})}" class="btn btn-danger"
-               th:text="#{user.delete}"></a></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/deleteTariff/{id}(id=${tariff.idTariff})}"
+                                                     class="btn btn-danger"
+                                                     th:text="#{user.delete}"></a></td>
+        <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/subscribeTariff/{id}(id=${tariff.idTariff})}"
+                                                    class="btn btn-info col-4">Subscribe</a></td>
     </tr>
     </tbody>
 </table>
+<div th:if="${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2" th:text="#{page.rows}">
+            : [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+      <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+      <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                    </span>
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}" th:text="#{page.next}"></a>
+            <span th:unless="${currentPage < totalPages}" th:text="#{page.next}"></span>
+        </div>
+
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}}" th:text="#{page.last}"></a>
+            <span th:unless="${currentPage < totalPages}" th:text="#{page.last}"></span>
+        </div>
+    </div>
+</div>

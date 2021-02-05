@@ -9,6 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css"
+          integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw=="
+          crossorigin="anonymous"/>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -27,6 +30,11 @@
                 <a th:href="@{/main}"><i class="fa fa-users" aria-hidden="true"></i></a>
             </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="flag-icon flag-icon-ua" href="/account?lang=ua"></a></li>
+            <li>&nbsp;&nbsp;</li>
+            <li><a class="flag-icon flag-icon-us" href="/account?lang=en"></a></li>
+        </ul>
     </div>
 </nav>
 <div class="container align-items-center">
@@ -43,6 +51,45 @@
                     <div class="profile-usertitle justify-content-center">
                         <div sec:authorize="isAuthenticated()" class="profile-usertitle-name">
                             <span sec:authentication="name">Username</span>
+                            <h6 th:text="#{user.balance}"></h6>
+                            <h4 th:text="${balance}"></h4>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModalCenter" th:text="#{account.replenishment}">
+                            </button>
+
+                            <!-- Modal -->
+                            <form th:action="@{/account}" th:object="${user}" method="post">
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle" th:text="#{account.replenishment}"></h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group"
+                                                     th:classappend="${#fields.hasErrors('balance')}? 'has-error':''">
+                                                    <label for="balance" class="control-label" th:text="#{user.balance}"></label>
+                                                    <input id="balance" class="form-control" th:field="*{balance}"/>
+                                                    <p class="error-message"
+                                                       th:each="error: ${#fields.errors('balance')}"
+                                                       th:text="${error}">Validation error</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{сlose}">
+                                                </button>
+                                                <button type="submit" class="btn btn-success" th:text="#{save}"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -53,6 +100,7 @@
                 <table boarder="1" class="table table-striped table-responsive-md">
                     <thead>
                     <tr>
+                        <th>Type</th>
                         <th th:text="#{tariff.name}"></th>
                         <th th:text="#{tariff.description}"></th>
                         <th th:text="#{tariff.price}"></th>
@@ -60,9 +108,11 @@
                     </thead>
                     <tbody>
                     <tr th:each="tariff : ${tariffList}">
+                        <td th:text="${tariff.type}"></td>
                         <td th:text="${tariff.name}"></td>
                         <td th:text="${tariff.description}"></td>
                         <td th:text="${tariff.price}"></td>
+                        <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/unsubscribeTariff/{id}(id=${tariff.idTariff})}" class="btn btn-info col-4">Unsubscribe</a></td>
                     </tr>
                     </tbody>
                 </table>

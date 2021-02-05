@@ -6,7 +6,6 @@ import springboot.dto.UserDTO;
 import springboot.entity.Tariff;
 import springboot.entity.User;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -15,15 +14,15 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findByEmail(String email);
 
-    List<User> getAllUsers();
-
     void saveUser(User user);
-
-    User getUserById(int id);
 
     void deleteUserById(int id);
 
-    Set<Tariff> findUserTariffs(int id);
-
     Page<User> findPaginated(int pageNo, int pageSize);
+
+    double getUserBalance(String email);
+
+    void updateUserBalance(String email, double balance);
+
+    Set<Tariff> getUserTariffs(String email);
 }

@@ -20,30 +20,6 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String firstname, String lastname, String email, String password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String firstname, String lastname, String email, String password, Collection<Role> roles) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-    public User(String firstname, String lastname, String email, String password, Collection<Role> roles, Set<Tariff> tariffs, Account account) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.tariffs = tariffs;
-        this.account = account;
-    }
-
     @Id
     @Column(name = "id")
     @SequenceGenerator(name = "usersIdSeq", sequenceName = "users_id_seq", allocationSize = 1)
@@ -71,9 +47,8 @@ public class User {
                     name = "tariff_id", referencedColumnName = "id"
             ))
     private Set<Tariff> tariffs;
-    @OneToOne
-    @JoinTable(name = "account", joinColumns = @JoinColumn(name = "account_id"))
-    private Account account;
+    @Column(name = "balance")
+    private Double balance;
 
     public Integer getId() {
         return id;
@@ -129,12 +104,13 @@ public class User {
     public void setTariffs(Set<Tariff> tariffs) {
         this.tariffs = tariffs;
     }
-    public Account getAccount() {
-        return account;
+
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     @Override
@@ -147,7 +123,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 ", tariffs=" + tariffs +
-                ", account=" + account +
+                ", balance=" + balance +
                 '}';
     }
 }

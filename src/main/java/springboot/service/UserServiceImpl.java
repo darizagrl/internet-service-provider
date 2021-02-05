@@ -15,8 +15,8 @@ import springboot.entity.Tariff;
 import springboot.entity.User;
 import springboot.repository.UserRepo;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,25 +33,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return this.userRepo.findAll();
-    }
-
-    @Override
     public void saveUser(User user) {
         this.userRepo.save(user);
-    }
-
-    @Override
-    public User getUserById(int id) {
-        Optional<User> optional = userRepo.findById(id);
-        User user;
-        if (optional.isPresent()) {
-            user = optional.get();
-        } else {
-            throw new RuntimeException("User not found for id :: " + id);
-        }
-        return user;
     }
 
     @Override
@@ -67,6 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
         user.setRoles(Collections.singletonList(new Role("ROLE_USER")));
+        user.setBalance(0.0);
         return userRepo.save(user);
     }
 
@@ -78,19 +62,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Tariff> findUserTariffs(int id) {
-        Optional<User> optional = userRepo.findById(id);
+    public Page<User> findPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.userRepo.findAll(pageable);
+    }
+
+    @Override
+    public double getUserBalance(String email) {
+        Optional<User> optional = userRepo.findByEmail(email);
         User user;
         if (optional.isPresent()) {
             user = optional.get();
         } else {
-            throw new RuntimeException("User not found for id :: " + id);
+            throw new RuntimeException("User not found for email :: " + email);
+        }
+        return user.getBalance();
+    }
+
+    @Transactional
+    @Override
+    public void updateUserBalance(String email, double balance) {
+        Optional<User> optional = userRepo.findByEmail(email);
+        User user;
+        if (optional.isPresent()) {
+            user = optional.get();
+        } else {
+            throw new RuntimeException("User not found for email :: " + email);
+        }
+        userRepo.updateBalance(email, balance + user.getBalance());
+    }
+
+    @Override
+    public Set<Tariff> getUserTariffs(String email) {
+        Optional<User> optional = userRepo.findByEmail(email);
+        User user;
+        if (optional.isPresent()) {
+            user = optional.get();
+        } else {
+            throw new RuntimeException("User not found for email :: " + email);
         }
         return user.getTariffs();
-    }
-    @Override
-    public Page<User> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return this.userRepo.findAll(pageable);
     }
 }
