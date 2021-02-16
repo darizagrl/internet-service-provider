@@ -6,5 +6,4 @@ import springboot.entity.Account;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer> {
-    Account findByIdAccount(Integer idAccount);
 }

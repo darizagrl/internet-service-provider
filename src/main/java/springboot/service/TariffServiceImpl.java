@@ -5,14 +5,21 @@ import org.springframework.stereotype.Service;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
 import springboot.repository.TariffRepo;
+import springboot.repository.UserRepo;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TariffServiceImpl implements TariffService {
+    private final TariffRepo tariffRepo;
+    private final UserRepo userRepo;
+
     @Autowired
-    private TariffRepo tariffRepo;
+    public TariffServiceImpl(TariffRepo tariffRepo, UserRepo userRepo) {
+        this.tariffRepo = tariffRepo;
+        this.userRepo = userRepo;
+    }
 
     @Override
     public List<Tariff> getAllTariffsByType(String type) {
@@ -40,6 +47,7 @@ public class TariffServiceImpl implements TariffService {
         tariff.setType(tariffDTO.getType());
         return tariffRepo.save(tariff);
     }
+
 
     @Override
     public void deleteTariff(int id) {

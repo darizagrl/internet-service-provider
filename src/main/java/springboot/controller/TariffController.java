@@ -1,35 +1,30 @@
 package springboot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
-import springboot.repository.TariffRepo;
-import springboot.repository.UserRepo;
 import springboot.service.TariffService;
 import springboot.service.TariffSubscribingService;
 
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.List;
 
 @Controller
 public class TariffController {
+    private final TariffService tariffService;
+    private final TariffSubscribingService subscribingService;
+
     @Autowired
-    TariffService tariffService;
-    @Autowired
-    TariffRepo tariffRepo;
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    TariffSubscribingService subscribingService;
+    public TariffController(TariffService tariffService, TariffSubscribingService subscribingService) {
+        this.tariffService = tariffService;
+        this.subscribingService = subscribingService;
+    }
 
     @GetMapping("/tariffs")
     public String viewTariffs(Model model) {
@@ -50,14 +45,12 @@ public class TariffController {
     }
 
     @GetMapping("/showNewTariff")
-    public String showNewTariff(Model model) {
-        Tariff tariff = new Tariff();
-        model.addAttribute("tariff", tariff);
+    public String showNewTariff(@ModelAttribute("tariff") Tariff tariff) {
         return "new_tariff";
     }
 
     @PostMapping("/saveTariff")
-    public String saveTariff(@ModelAttribute("tariff") TariffDTO tariffDTO, BindingResult result) {
+    public String saveTariff(@ModelAttribute("tariff") TariffDTO tariffDTO) {
         tariffService.addTariff(tariffDTO);
         return "redirect:/tariffs";
     }
@@ -71,15 +64,14 @@ public class TariffController {
 
     @GetMapping("/deleteTariff/{id}")
     public String deleteTariff(@PathVariable(value = "id") int id) {
-        // call delete user method
-        this.tariffService.deleteTariff(id);
+        tariffService.deleteTariff(id);
         return "redirect:/tariffs";
     }
 
     @GetMapping("/subscribeTariff/{id}")
     public String subscribeTariff(@PathVariable(value = "id") int id, Principal principal) {
         String un = principal.getName();
-        this.tariffService.tariffById(id);
+        tariffService.tariffById(id);
         subscribingService.subscribe(id, un);
         return "redirect:/tariffs?success";
     }
@@ -87,7 +79,7 @@ public class TariffController {
     @GetMapping("/subscribeTariff/{id}?error")
     public String subscribeTariffError(@PathVariable(value = "id") int id, Principal principal) {
         String un = principal.getName();
-        this.tariffService.tariffById(id);
+        tariffService.tariffById(id);
         subscribingService.subscribe(id, un);
         return "redirect:/tariffs?error";
     }

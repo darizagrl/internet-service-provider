@@ -14,29 +14,7 @@
           crossorigin="anonymous"/>
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}"><i class="fa fa-home"></i></a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a th:href="@{/login}"><i class="fa fa-sign-in"
-                                          aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i class="fa fa-sign-out"
-                                                                             aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/account}"><span
-                    class="glyphicon glyphicon-user"></span></a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
-                <a th:href="@{/main}"><i class="fa fa-users" aria-hidden="true"></i></a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a class="flag-icon flag-icon-ua" href="/account?lang=ua"></a></li>
-            <li>&nbsp;&nbsp;</li>
-            <li><a class="flag-icon flag-icon-us" href="/account?lang=en"></a></li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="/header :: header"> </div>
 <div class="container align-items-center">
     <div class="row profile">
         <div class="col-md-3">
@@ -65,26 +43,36 @@
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle" th:text="#{account.replenishment}"></h5>
+                                                <h5 class="modal-title" id="exampleModalLongTitle"
+                                                    th:text="#{account.replenishment}"></h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group"
-                                                     th:classappend="${#fields.hasErrors('balance')}? 'has-error':''">
-                                                    <label for="balance" class="control-label" th:text="#{user.balance}"></label>
-                                                    <input id="balance" class="form-control" th:field="*{balance}"/>
-                                                    <p class="error-message"
-                                                       th:each="error: ${#fields.errors('balance')}"
-                                                       th:text="${error}">Validation error</p>
-                                                </div>
+                                                <form th:action="@{/registration}" th:object="${user}" method="post">
+                                                    <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+                                                       th:each="error : ${#fields.errors('global')}" th:text="${error}">
+                                                        Validation
+                                                        error</p>
+                                                    <div class="form-group"
+                                                         th:classappend="${#fields.hasErrors('balance')}? 'has-error':''">
+                                                        <label for="balance" class="control-label"
+                                                               th:text="#{user.balance}"></label>
+                                                        <input id="balance" class="form-control" th:field="*{balance}"/>
+                                                        <p class="error-message"
+                                                           th:each="error: ${#fields.errors('balance')}"
+                                                           th:text="${error}">Validation error</p>
+                                                    </div>
+                                                </form>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{сlose}">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                        th:text="#{сlose}">
                                                 </button>
-                                                <button type="submit" class="btn btn-success" th:text="#{save}"></button>
+                                                <button type="submit" class="btn btn-success"
+                                                        th:text="#{save}"></button>
                                             </div>
                                         </div>
                                     </div>
@@ -96,6 +84,9 @@
             </div>
         </div>
         <div class="col-md-9">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">You've successfully unsubscribed</div>
+            </div>
             <div class="profile-content">
                 <table boarder="1" class="table table-striped table-responsive-md">
                     <thead>
@@ -112,7 +103,9 @@
                         <td th:text="${tariff.name}"></td>
                         <td th:text="${tariff.description}"></td>
                         <td th:text="${tariff.price}"></td>
-                        <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/unsubscribeTariff/{id}(id=${tariff.idTariff})}" class="btn btn-info col-4">Unsubscribe</a></td>
+                        <td sec:authorize="hasRole('ROLE_USER')"><a
+                                th:href="@{/unsubscribeTariff/{id}(id=${tariff.idTariff})}" class="btn btn-info col-4">Unsubscribe</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

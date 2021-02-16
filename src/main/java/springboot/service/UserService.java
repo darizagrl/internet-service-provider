@@ -18,7 +18,7 @@ public interface UserService extends UserDetailsService {
 
     void deleteUserById(int id);
 
-    Page<User> findPaginated(int pageNo, int pageSize);
+    Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortOrder);
 
     double getUserBalance(String email);
 

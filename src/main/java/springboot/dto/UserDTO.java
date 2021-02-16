@@ -4,6 +4,7 @@ import springboot.constraint.FieldMatch;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @FieldMatch.List({
@@ -28,6 +29,8 @@ public class UserDTO {
     private String confirmPassword;
     @AssertTrue
     private Boolean terms;
+    @Min(0)
+    private Double balance;
 
     public int getId() {
         return id;
@@ -69,7 +72,6 @@ public class UserDTO {
         this.confirmEmail = confirmEmail;
     }
 
-
     public String getPassword() {
         return password;
     }
@@ -92,5 +94,12 @@ public class UserDTO {
 
     public void setTerms(Boolean terms) {
         this.terms = terms;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 }

@@ -18,11 +18,6 @@
                                                      class="btn btn-danger" th:text="#{user.delete}"></a></td>
         <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/subscribeTariff/{id}(id=${tariff.idTariff})}"
                                                     class="btn btn-info col-4">Subscribe</a></td>
-        <td>
-            <!--                <a th:href="@{/showFormForUpdate/{id}(id=${user.id})}" class="btn btn-primary"-->
-            <!--                   th:text="#{user.update}"></a>-->
-            <!--                <a th:href="@{/deleteUser/{id}(id=${user.id})}" class="btn btn-danger" th:text="#{user.delete}"></a>-->
-        </td>
     </tr>
     </tbody>
 </table>

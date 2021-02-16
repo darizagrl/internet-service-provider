@@ -12,13 +12,17 @@ import java.util.NoSuchElementException;
 
 @Service
 public class TariffSubscribingService {
+    private final TariffRepo tariffRepo;
+    private final UserRepo userRepo;
+
     @Autowired
-    private TariffRepo tariffRepo;
-    @Autowired
-    private UserRepo userRepo;
+    public TariffSubscribingService(TariffRepo tariffRepo, UserRepo userRepo) {
+        this.tariffRepo = tariffRepo;
+        this.userRepo = userRepo;
+    }
 
     @Transactional
-    public Tariff subscribe(Integer tariffId, String userEmail) {
+    public void subscribe(Integer tariffId, String userEmail) {
         Tariff tariff = tariffRepo.findByIdTariff(tariffId)
                 .orElseThrow(NoSuchElementException::new);
         User user = userRepo.findByEmail(userEmail)
@@ -29,7 +33,6 @@ public class TariffSubscribingService {
         user.setBalance(user.getBalance() - tariff.getPrice());
         user.getTariffs().add(tariff);
         userRepo.save(user);
-        return tariff;
     }
 
     @Transactional

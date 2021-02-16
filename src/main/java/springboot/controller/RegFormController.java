@@ -18,8 +18,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/registration")
 public class RegFormController {
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public RegFormController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String registration(Model model) {
@@ -37,6 +41,6 @@ public class RegFormController {
             return "registration";
         }
         userService.save(userDTO);
-        return "redirect:/login";
+        return "redirect:/registration?success";
     }
 }

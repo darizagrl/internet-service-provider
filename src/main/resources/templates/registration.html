@@ -14,30 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<!-- navigation bar -->
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}"><i class="fa fa-home"></i></a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a th:href="@{/login}"><i class="fa fa-sign-in"
-                                          aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i class="fa fa-sign-out"
-                                                                             aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/account}"><span
-                    class="glyphicon glyphicon-user"></span></a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
-                <a th:href="@{/main}"><i class="fa fa-users" aria-hidden="true"></i></a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a class="flag-icon flag-icon-ua" href="/registration?lang=ua"></a></li>
-            <li>&nbsp;&nbsp;</li>
-            <li><a class="flag-icon flag-icon-us" href="/registration?lang=en"></a></li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="/header :: header"> </div>
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -46,7 +23,7 @@
             <div th:if="${param.success}">
                 <div class="alert alert-info">You've been successfully registered</div>
             </div>
-            <h1>Registration</h1>
+            <h2 class="text-center">Registration</h2>
             <form th:action="@{/registration}" th:object="${user}" method="post">
                 <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
                    th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
@@ -77,9 +54,8 @@
                 </div>
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('confirmEmail')}? 'has-error':''">
-                    <label for="confirmEmail" class="control-label" th:text="#{user.confirm.email}">
-
-                    </label> <input id="confirmEmail" class="form-control"
+                    <label for="confirmEmail" class="control-label" th:text="#{user.confirm.email}"></label>
+                    <input id="confirmEmail" class="form-control"
                                               th:field="*{confirmEmail}"/>
                     <p class="error-message"
                        th:each="error : ${#fields.errors('confirmEmail')}"
@@ -114,8 +90,9 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Register</button>
-                    <div></div>
+                    <div>
                     <span>Already registered? <a href="/" th:href="@{/login}">Login here</a> </span>
+                    </div>
                 </div>
             </form>
         </div>

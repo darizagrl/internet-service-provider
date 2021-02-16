@@ -17,4 +17,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User u set u.balance = :balance where u.email = :email")
     void updateBalance(@Param(value = "email") String email, @Param(value = "balance") double balance);
+
+
 }

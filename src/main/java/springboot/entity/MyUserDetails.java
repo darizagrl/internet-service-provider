@@ -9,12 +9,9 @@ import java.util.Collection;
 import static java.util.stream.Collectors.toList;
 
 public class MyUserDetails implements UserDetails {
-    private String email;
-    private String password;
-    private Collection<GrantedAuthority> authorities;
-
-    public MyUserDetails() {
-    }
+    private final String email;
+    private final String password;
+    private final Collection<GrantedAuthority> authorities;
 
     public MyUserDetails(User user) {
         this.email = user.getEmail();

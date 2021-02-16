@@ -19,31 +19,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}"><i class="fa fa-home"></i></a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a th:href="@{/login}"><i class="fa fa-sign-in"
-                                          aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i class="fa fa-sign-out"
-                                                                             aria-hidden="true"></i></a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/account}"><span
-                    class="glyphicon glyphicon-user"></span></a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
-                <a th:href="@{/main}"><i class="fa fa-users" aria-hidden="true"></i></a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a class="flag-icon flag-icon-ua" href="/tariffs?lang=ua"></a></li>
-            <li>&nbsp;&nbsp;</li>
-           <li><a class="flag-icon flag-icon-us" href="/tariffs?lang=en"></a></li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="/header :: header"> </div>
 <div class="p-5 text-center bg-image"
-     th:style="'background: url(/images/75244_47431_1835.jpg); height: 400px;'">
+     th:style="'background: url(/images/header.jpg); height: 400px;'">
 </div>
 <div class="container my-2">
     <h1 th:text="#{tariff.list}"></h1>

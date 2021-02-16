@@ -1,5 +1,7 @@
 package springboot.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 public class TariffDTO {
@@ -8,6 +10,8 @@ public class TariffDTO {
     private String name;
     private String description;
     @NotEmpty
+    @Min(0)
+    @Max(1000)
     private double price;
     @NotEmpty
     private String type;
