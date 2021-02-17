@@ -1,9 +1,11 @@
 package springboot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import springboot.entity.User;
@@ -11,6 +13,7 @@ import springboot.service.TariffService;
 import springboot.service.TariffSubscribingService;
 import springboot.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -38,12 +41,11 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public String accountReplenishment(Model model, Principal principal) {
+    public String accountReplenishment(@AuthenticationPrincipal @ModelAttribute User user, @Valid Model model, Principal principal) {
         String un = principal.getName();
-        Optional<User> user = userService.findByEmail(un);
-        model.addAttribute("balance", user.get().getBalance());
+        model.addAttribute("balance", user.getBalance());
         model.addAttribute("user", user);
-        userService.updateUserBalance(un, user.get().getBalance());
+        userService.updateUserBalance(un, user.getBalance());
         return "redirect:/account";
     }
 

@@ -1,5 +1,7 @@
 package springboot.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springboot.entity.Tariff;
@@ -12,6 +14,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class TariffSubscribingService {
+    private final Logger logger = LogManager.getLogger(TariffSubscribingService.class);
     private final TariffRepo tariffRepo;
     private final UserRepo userRepo;
 
@@ -28,7 +31,7 @@ public class TariffSubscribingService {
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(NoSuchElementException::new);
         if (user.getBalance() < tariff.getPrice()) {
-            throw new RuntimeException("Insufficient funds");
+            logger.error("Insufficient funds");
         }
         user.setBalance(user.getBalance() - tariff.getPrice());
         user.getTariffs().add(tariff);

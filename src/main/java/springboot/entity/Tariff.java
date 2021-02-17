@@ -1,6 +1,9 @@
 package springboot.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
@@ -12,14 +15,18 @@ public class Tariff {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tariffIdSeq")
     private Integer idTariff;
     @Column(name = "name", nullable = false)
+    @NotEmpty(message = "Name cannot be empty")
     private String name;
     @Column(name = "description")
+    @NotEmpty(message = "Description cannot be empty")
     private String description;
     @Column(name = "price", nullable = false)
+    @Min(0) @Max(1000)
     private double price;
     @Column(name = "type")
     @JoinTable(name = "service",
             joinColumns = @JoinColumn(name = "name", referencedColumnName = "type"))
+    @NotEmpty(message = "Type cannot be empty")
     private String type;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

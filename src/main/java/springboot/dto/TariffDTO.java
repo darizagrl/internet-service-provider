@@ -6,12 +6,9 @@ import javax.validation.constraints.NotEmpty;
 
 public class TariffDTO {
     private Integer idTariff;
-    @NotEmpty
     private String name;
     private String description;
-    @NotEmpty
-    @Min(0)
-    @Max(1000)
+
     private double price;
     @NotEmpty
     private String type;

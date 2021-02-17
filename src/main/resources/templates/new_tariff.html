@@ -40,7 +40,7 @@
         <div class="form-group"
              th:classappend="${#fields.hasErrors('price')}? 'has-error':''">
             <label for="price" class="control-label" th:text="#{tariff.price}"></label>
-            <input id="price" class="form-control" th:field="*{price}"/>
+            <input type="number" id="price" class="form-control" th:field="*{price}"/>
             <p class="error-message"
                th:each="error : ${#fields.errors('price')}" th:text="${error}">Validation
                 error</p>

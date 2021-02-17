@@ -1,5 +1,7 @@
 package springboot.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     @Autowired
     private UserRepo userRepo;
     @Autowired
@@ -64,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortOrder) {
-        Sort sort = sortOrder.equalsIgnoreCase(Sort.DEFAULT_DIRECTION.name()) ? Sort.by(sortField).ascending():
+        Sort sort = sortOrder.equalsIgnoreCase(Sort.DEFAULT_DIRECTION.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         return this.userRepo.findAll(pageable);
@@ -77,7 +80,8 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             user = optional.get();
         } else {
-            throw new RuntimeException("User not found for email :: " + email);
+            logger.error("User not found for email : " + email);
+            throw new RuntimeException("User not found for email : " + email);
         }
         return user.getBalance();
     }
@@ -90,7 +94,8 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             user = optional.get();
         } else {
-            throw new RuntimeException("User not found for email :: " + email);
+            logger.error("User not found for email : " + email);
+            throw new RuntimeException("User not found for email : " + email);
         }
         userRepo.updateBalance(email, balance + user.getBalance());
     }
@@ -102,7 +107,8 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             user = optional.get();
         } else {
-            throw new RuntimeException("User not found for email :: " + email);
+            logger.error("User not found for email : " + email);
+            throw new RuntimeException("User not found for email : " + email);
         }
         return user.getTariffs();
     }

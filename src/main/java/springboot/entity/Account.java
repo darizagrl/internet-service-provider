@@ -1,6 +1,7 @@
 package springboot.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,7 @@ public class Account {
     private Long account;
 
     @Column(name = "balance")
+    @Min(0)
     private Double balance;
 
     public Account(Long account, Double balance) {

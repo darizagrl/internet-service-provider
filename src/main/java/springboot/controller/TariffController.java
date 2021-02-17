@@ -3,26 +3,33 @@ package springboot.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
+import springboot.entity.User;
 import springboot.service.TariffService;
 import springboot.service.TariffSubscribingService;
+import springboot.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Controller
 public class TariffController {
     private final TariffService tariffService;
+    private final UserService userService;
     private final TariffSubscribingService subscribingService;
 
     @Autowired
-    public TariffController(TariffService tariffService, TariffSubscribingService subscribingService) {
+    public TariffController(TariffService tariffService, UserService userService, TariffSubscribingService subscribingService) {
         this.tariffService = tariffService;
+        this.userService = userService;
         this.subscribingService = subscribingService;
     }
 
@@ -56,7 +63,7 @@ public class TariffController {
     }
 
     @GetMapping("/showFormForTariffUpdate/{id}")
-    public String showFormForTariffUpdate(@PathVariable(value = "id") int id, Model model) {
+    public String showFormForTariffUpdate(@PathVariable(value = "id") int id, @Valid Model model) {
         Tariff tariff = tariffService.tariffById(id);
         model.addAttribute("tariff", tariff);
         return "update_tariff";
@@ -69,18 +76,14 @@ public class TariffController {
     }
 
     @GetMapping("/subscribeTariff/{id}")
-    public String subscribeTariff(@PathVariable(value = "id") int id, Principal principal) {
+    public String subscribeTariff(@PathVariable(value = "id") int id, Principal principal, Model model) {
         String un = principal.getName();
-        tariffService.tariffById(id);
+        Tariff tariff = tariffService.tariffById(id);
+        Optional<User> user = userService.findByEmail(un);
+        if (user.get().getBalance() < tariff.getPrice()) {
+            return "redirect:/tariffs?error";
+        }
         subscribingService.subscribe(id, un);
         return "redirect:/tariffs?success";
-    }
-
-    @GetMapping("/subscribeTariff/{id}?error")
-    public String subscribeTariffError(@PathVariable(value = "id") int id, Principal principal) {
-        String un = principal.getName();
-        tariffService.tariffById(id);
-        subscribingService.subscribe(id, un);
-        return "redirect:/tariffs?error";
     }
 }
