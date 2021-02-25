@@ -19,16 +19,26 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:replace="/header :: header"> </div>
+<div th:replace="/header :: header"></div>
 <div class="p-5 text-center bg-image"
      th:style="'background: url(/images/header.jpg); height: 400px;'">
 </div>
 <div class="container my-2">
     <h1 th:text="#{tariff.list}"></h1>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a th:href="@{/showNewTariff}" class="btn btn-primary btn-sm mb-3" th:text="#{tariff.add}"></a>
+        <a th:href="@{/showNewTariff}" class="btn btn-info col-4" th:text="#{tariff.add}"></a>
     </div>
-
+    <a th:href="@{/tariffs/export/pdf}" class="btn btn-info col-4" th:text="#{tariff.export}"></a>
+    <br>
+    <div th:if="${param.success}">
+        <div class="alert alert-success" th:text="#{subscribe.success}"></div>
+    </div>
+    <div th:if="${param.error}">
+        <div class="alert alert-danger" th:text="#{subscribe.insufficient}"></div>
+    </div>
+    <div th:if="${param.error_blocked}">
+        <div class="alert alert-danger" th:text="#{subscribe.error.blocked}"></div>
+    </div>
     <div class="container">
 
         <div class="row">

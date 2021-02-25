@@ -1,9 +1,10 @@
-package springboot.service;
+package springboot.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springboot.entity.Account;
 import springboot.repository.AccountRepo;
+import springboot.service.AccountService;
 
 @Service
 public class AccountServiceImpl implements AccountService {

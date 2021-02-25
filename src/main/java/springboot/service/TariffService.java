@@ -13,4 +13,6 @@ public interface TariffService {
     Tariff addTariff(TariffDTO tariffDTO);
 
     void deleteTariff(int id);
+
+    List<Tariff> getAllTariffs();
 }

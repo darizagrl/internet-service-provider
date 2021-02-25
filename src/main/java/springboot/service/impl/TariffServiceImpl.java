@@ -1,11 +1,11 @@
-package springboot.service;
+package springboot.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
 import springboot.repository.TariffRepo;
-import springboot.repository.UserRepo;
+import springboot.service.TariffService;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +13,10 @@ import java.util.Optional;
 @Service
 public class TariffServiceImpl implements TariffService {
     private final TariffRepo tariffRepo;
-    private final UserRepo userRepo;
 
     @Autowired
-    public TariffServiceImpl(TariffRepo tariffRepo, UserRepo userRepo) {
+    public TariffServiceImpl(TariffRepo tariffRepo) {
         this.tariffRepo = tariffRepo;
-        this.userRepo = userRepo;
     }
 
     @Override
@@ -52,5 +50,10 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public void deleteTariff(int id) {
         this.tariffRepo.deleteById(id);
+    }
+
+    @Override
+    public List<Tariff> getAllTariffs() {
+        return tariffRepo.findAll();
     }
 }

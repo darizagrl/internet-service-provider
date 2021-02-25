@@ -12,7 +12,6 @@ import springboot.service.UserService;
 
 import java.util.List;
 
-
 @Controller
 public class HomeController {
     private final UserService userService;

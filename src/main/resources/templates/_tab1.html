@@ -18,7 +18,7 @@
                                                      class="btn btn-danger"
                                                      th:text="#{user.delete}"></a></td>
         <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/subscribeTariff/{id}(id=${tariff.idTariff})}"
-                                                    class="btn btn-info col-4">Subscribe</a></td>
+                                                    class="btn btn-info col-4" th:text="#{tariff.subscribe}"></a></td>
     </tr>
     </tbody>
 </table>

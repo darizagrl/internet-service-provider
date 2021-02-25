@@ -12,12 +12,13 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String firstname, String lastname, String email, String password, Collection<Role> roles) {
+    public User(Integer id, String firstname, String lastname, String email, String password, boolean isBlocked, Collection<Role> roles) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.isBlocked = isBlocked;
         this.roles = roles;
     }
 
@@ -34,6 +35,8 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "isblocked", nullable = false)
+    private boolean isBlocked;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -49,7 +52,6 @@ public class User {
             ))
     private Set<Tariff> tariffs;
     @Column(name = "balance")
-    @Min(0)
     private Double balance;
 
     public Integer getId() {
@@ -92,6 +94,14 @@ public class User {
         this.password = password;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -99,6 +109,7 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
     public Set<Tariff> getTariffs() {
         return tariffs;
     }

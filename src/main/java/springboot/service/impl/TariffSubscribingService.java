@@ -1,4 +1,4 @@
-package springboot.service;
+package springboot.service.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,12 +30,17 @@ public class TariffSubscribingService {
                 .orElseThrow(NoSuchElementException::new);
         User user = userRepo.findByEmail(userEmail)
                 .orElseThrow(NoSuchElementException::new);
-        if (user.getBalance() < tariff.getPrice()) {
-            logger.error("Insufficient funds");
+        if (user.isBlocked()) {
+            logger.error("Your account is blocked. Top up your balance if you want to subscribe.");
+        } else {
+            if (user.getBalance() < tariff.getPrice()) {
+                logger.error("Insufficient funds.");
+                user.setBlocked(true);
+            }
+            user.setBalance(user.getBalance() - tariff.getPrice());
+            user.getTariffs().add(tariff);
+            userRepo.save(user);
         }
-        user.setBalance(user.getBalance() - tariff.getPrice());
-        user.getTariffs().add(tariff);
-        userRepo.save(user);
     }
 
     @Transactional

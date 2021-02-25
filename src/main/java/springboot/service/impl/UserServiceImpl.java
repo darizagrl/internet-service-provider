@@ -1,4 +1,4 @@
-package springboot.service;
+package springboot.service.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +17,7 @@ import springboot.entity.Role;
 import springboot.entity.Tariff;
 import springboot.entity.User;
 import springboot.repository.UserRepo;
+import springboot.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
@@ -97,7 +98,11 @@ public class UserServiceImpl implements UserService {
             logger.error("User not found for email : " + email);
             throw new RuntimeException("User not found for email : " + email);
         }
-        userRepo.updateBalance(email, balance + user.getBalance());
+        user.setBalance(balance + user.getBalance());
+        if (user.isBlocked() && user.getBalance() >= 0) {
+            user.setBlocked(false);
+        }
+        userRepo.save(user);
     }
 
     @Override

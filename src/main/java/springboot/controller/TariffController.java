@@ -1,9 +1,9 @@
 package springboot.controller;
 
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +12,19 @@ import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
 import springboot.entity.User;
 import springboot.service.TariffService;
-import springboot.service.TariffSubscribingService;
 import springboot.service.UserService;
+import springboot.service.impl.TariffSubscribingService;
+import springboot.utils.TariffPDFExporter;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -43,10 +50,17 @@ public class TariffController {
     public String tab(@PathVariable String tab, Model model) {
         if (Arrays.asList("tab1", "tab2", "tab3")
                 .contains(tab)) {
-            model.addAttribute("phoneTariffList", tariffService.getAllTariffsByType("Phone"));
-            model.addAttribute("tvTariffList", tariffService.getAllTariffsByType("TV"));
-            model.addAttribute("internetTariffList", tariffService.getAllTariffsByType("Internet"));
-            return "_" + tab;
+            switch (tab) {
+                case "tab2":
+                    model.addAttribute("tvTariffList", tariffService.getAllTariffsByType("TV"));
+                    return "_" + "tab2";
+                case "tab3":
+                    model.addAttribute("internetTariffList", tariffService.getAllTariffsByType("Internet"));
+                    return "_" + "tab3";
+                default:
+                    model.addAttribute("phoneTariffList", tariffService.getAllTariffsByType("Phone"));
+                    return "_" + "tab1";
+            }
         }
         return "tariffs";
     }
@@ -76,14 +90,36 @@ public class TariffController {
     }
 
     @GetMapping("/subscribeTariff/{id}")
-    public String subscribeTariff(@PathVariable(value = "id") int id, Principal principal, Model model) {
+    public String subscribeTariff(@PathVariable(value = "id") int id, Principal principal) {
         String un = principal.getName();
         Tariff tariff = tariffService.tariffById(id);
         Optional<User> user = userService.findByEmail(un);
-        if (user.get().getBalance() < tariff.getPrice()) {
-            return "redirect:/tariffs?error";
+        if (user.get().isBlocked()) {
+            return "redirect:/tariffs?error_blocked";
+        } else {
+            if (user.get().getBalance() < tariff.getPrice()) {
+                subscribingService.subscribe(id, un);
+                return "redirect:/tariffs?error";
+            } else {
+                subscribingService.subscribe(id, un);
+                return "redirect:/tariffs?success";
+            }
         }
-        subscribingService.subscribe(id, un);
-        return "redirect:/tariffs?success";
+    }
+
+    @GetMapping("/tariffs/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=tariffs_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Tariff> tariffList = tariffService.getAllTariffs();
+
+        TariffPDFExporter exporter = new TariffPDFExporter(tariffList);
+        exporter.export(response);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import springboot.entity.User;
 import springboot.service.TariffService;
-import springboot.service.TariffSubscribingService;
+import springboot.service.impl.TariffSubscribingService;
 import springboot.service.UserService;
 
 import javax.validation.Valid;
@@ -34,16 +34,13 @@ public class AccountController {
     public String account(Model model, Principal principal) {
         String un = principal.getName();
         Optional<User> user = userService.findByEmail(un);
-        model.addAttribute("balance", user.get().getBalance());
         model.addAttribute("user", user);
-        model.addAttribute("tariffList", user.get().getTariffs());
         return "account";
     }
 
     @PostMapping("/account")
     public String accountReplenishment(@AuthenticationPrincipal @ModelAttribute User user, @Valid Model model, Principal principal) {
         String un = principal.getName();
-        model.addAttribute("balance", user.getBalance());
         model.addAttribute("user", user);
         userService.updateUserBalance(un, user.getBalance());
         return "redirect:/account";
