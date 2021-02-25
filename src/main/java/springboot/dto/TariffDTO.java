@@ -1,14 +1,25 @@
 package springboot.dto;
 
-import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
+
+import javax.validation.constraints.*;
 
 public class TariffDTO {
     private Integer idTariff;
+    @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "\\w{4,255}|\\p{L}{4,255}")
     private String name;
     private String description;
-
-    private double price;
+    @Min(0)
+    @Max(1000)
+    @NumberFormat
     @NotEmpty
+    @NotBlank
+    private double price;
+    @NotBlank
+    @NotEmpty
+    @Pattern(regexp = "\\w{3,255}|\\p{L}{3,255}")
     private String type;
 
     public Integer getIdTariff() {

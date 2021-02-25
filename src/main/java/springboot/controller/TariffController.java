@@ -1,9 +1,12 @@
 package springboot.controller;
 
 import com.lowagie.text.DocumentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +32,7 @@ import java.util.Optional;
 
 @Controller
 public class TariffController {
+    private final Logger logger = LogManager.getLogger(TariffController.class);
     private final TariffService tariffService;
     private final UserService userService;
     private final TariffSubscribingService subscribingService;
@@ -71,21 +75,40 @@ public class TariffController {
     }
 
     @PostMapping("/saveTariff")
-    public String saveTariff(@ModelAttribute("tariff") TariffDTO tariffDTO) {
+    public String saveTariff(@Valid @ModelAttribute("tariff") TariffDTO tariffDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            logger.error("Something was wrong with fields of the {} tariff", tariffDTO.getName());
+            return "new_tariff";
+        }
         tariffService.addTariff(tariffDTO);
+        logger.info("Tariff {} was successfully created", tariffDTO.getName());
         return "redirect:/tariffs";
     }
 
-    @GetMapping("/showFormForTariffUpdate/{id}")
-    public String showFormForTariffUpdate(@PathVariable(value = "id") int id, @Valid Model model) {
+    @GetMapping("/edit_tariff/{id}")
+    public String editTariff(@PathVariable(value = "id") int id, Model model) {
         Tariff tariff = tariffService.tariffById(id);
         model.addAttribute("tariff", tariff);
         return "update_tariff";
     }
 
+    @PostMapping("/update_tariff/{id}")
+    public String updateTariff(@PathVariable("id") int id, @Valid @ModelAttribute("tariff") TariffDTO tariffDTO,
+                               BindingResult result) {
+        if (result.hasErrors()) {
+            tariffDTO.setIdTariff(id);
+            logger.error("Something was wrong with fields of the {} tariff", tariffDTO.getName());
+            return "update_tariff";
+        }
+        tariffService.updateTariff(id, tariffDTO);
+        logger.info("Tariff {} was successfully updated", tariffDTO.getName());
+        return "redirect:/tariffs";
+    }
+
     @GetMapping("/deleteTariff/{id}")
     public String deleteTariff(@PathVariable(value = "id") int id) {
         tariffService.deleteTariff(id);
+        logger.warn("Tariff with id={} was deleted", id);
         return "redirect:/tariffs";
     }
 
@@ -95,13 +118,16 @@ public class TariffController {
         Tariff tariff = tariffService.tariffById(id);
         Optional<User> user = userService.findByEmail(un);
         if (user.get().isBlocked()) {
+            logger.warn("User {} is blocked", user.get().getEmail());
             return "redirect:/tariffs?error_blocked";
         } else {
             if (user.get().getBalance() < tariff.getPrice()) {
                 subscribingService.subscribe(id, un);
+                logger.warn("User {} was blocked and subscribed to tariff {}", user.get().getEmail(), tariff.getName());
                 return "redirect:/tariffs?error";
             } else {
                 subscribingService.subscribe(id, un);
+                logger.info("User {} has subscribed to tariff {}", user.get().getEmail(), tariff.getName());
                 return "redirect:/tariffs?success";
             }
         }

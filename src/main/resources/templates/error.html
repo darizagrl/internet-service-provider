@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Error</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:replace="/header :: header"> </div>
+<div th:replace="/header :: header"></div>
 <div class="container">
     <h1 th:inline="text">Something went wrong!</h1>
     <h4>Sorry, we couldn't find the page you were looking for</h4>

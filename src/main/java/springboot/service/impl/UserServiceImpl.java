@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import springboot.dto.UserDTO;
 import springboot.entity.MyUserDetails;
 import springboot.entity.Role;
-import springboot.entity.Tariff;
 import springboot.entity.User;
 import springboot.repository.UserRepo;
 import springboot.service.UserService;
@@ -22,13 +21,17 @@ import springboot.service.UserService;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private final UserRepo userRepo;
+
     @Autowired
-    private UserRepo userRepo;
+    public UserServiceImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -103,18 +106,5 @@ public class UserServiceImpl implements UserService {
             user.setBlocked(false);
         }
         userRepo.save(user);
-    }
-
-    @Override
-    public Set<Tariff> getUserTariffs(String email) {
-        Optional<User> optional = userRepo.findByEmail(email);
-        User user;
-        if (optional.isPresent()) {
-            user = optional.get();
-        } else {
-            logger.error("User not found for email : " + email);
-            throw new RuntimeException("User not found for email : " + email);
-        }
-        return user.getTariffs();
     }
 }

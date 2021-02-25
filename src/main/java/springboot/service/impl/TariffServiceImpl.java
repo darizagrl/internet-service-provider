@@ -46,6 +46,16 @@ public class TariffServiceImpl implements TariffService {
         return tariffRepo.save(tariff);
     }
 
+    @Override
+    public Tariff updateTariff(int id, TariffDTO tariffDTO) {
+        Tariff tariff = tariffRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid tariff Id:" + id));
+        tariff.setName(tariffDTO.getName());
+        tariff.setDescription(tariffDTO.getDescription());
+        tariff.setPrice(tariffDTO.getPrice());
+        tariff.setType(tariffDTO.getType());
+        return tariffRepo.save(tariff);
+    }
 
     @Override
     public void deleteTariff(int id) {

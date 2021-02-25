@@ -1,11 +1,9 @@
 package springboot.dto;
 
+import org.springframework.format.annotation.NumberFormat;
 import springboot.constraint.FieldMatch;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 @FieldMatch.List({
         @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
@@ -14,8 +12,12 @@ import javax.validation.constraints.NotEmpty;
 public class UserDTO {
     private Integer id;
     @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "\\p{L}{4,255}")
     private String firstname;
     @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "\\p{L}{4,255}")
     private String lastname;
     @Email
     @NotEmpty
@@ -24,12 +26,16 @@ public class UserDTO {
     @NotEmpty
     private String confirmEmail;
     @NotEmpty
+    @NotBlank
     private String password;
     @NotEmpty
+    @NotBlank
     private String confirmPassword;
     @AssertTrue
     private Boolean terms;
+    @NumberFormat
     @Min(0)
+    @Max(3000)
     private Double balance;
 
     public int getId() {

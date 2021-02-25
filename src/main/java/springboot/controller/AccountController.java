@@ -4,14 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import springboot.dto.UserDTO;
 import springboot.entity.User;
 import springboot.service.TariffService;
-import springboot.service.impl.TariffSubscribingService;
 import springboot.service.UserService;
+import springboot.service.impl.TariffSubscribingService;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -39,9 +41,13 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public String accountReplenishment(@AuthenticationPrincipal @ModelAttribute User user, @Valid Model model, Principal principal) {
+    public String accountReplenishment(@AuthenticationPrincipal @Valid @ModelAttribute("user") User user,
+                                       Principal principal,
+                                       BindingResult result) {
         String un = principal.getName();
-        model.addAttribute("user", user);
+        if (result.hasErrors()) {
+            return "account";
+        }
         userService.updateUserBalance(un, user.getBalance());
         return "redirect:/account";
     }

@@ -23,6 +23,4 @@ public interface UserService extends UserDetailsService {
     double getUserBalance(String email);
 
     void updateUserBalance(String email, double balance);
-
-    Set<Tariff> getUserTariffs(String email);
 }

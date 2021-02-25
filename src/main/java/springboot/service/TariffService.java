@@ -12,6 +12,8 @@ public interface TariffService {
 
     Tariff addTariff(TariffDTO tariffDTO);
 
+    Tariff updateTariff(int id, TariffDTO tariffDTO);
+
     void deleteTariff(int id);
 
     List<Tariff> getAllTariffs();

@@ -1,5 +1,7 @@
 package springboot.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+    private final Logger logger = LogManager.getLogger(HomeController.class);
     private final UserService userService;
 
     @Autowired
@@ -33,6 +36,7 @@ public class HomeController {
 
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable(value = "id") int id) {
+        logger.warn("Deleting user with id: {}", id);
         this.userService.deleteUserById(id);
         return "redirect:/index";
     }

@@ -27,8 +27,13 @@
     <h1 th:text="#{tariff.list}"></h1>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{/showNewTariff}" class="btn btn-info col-4" th:text="#{tariff.add}"></a>
+        <br>
     </div>
-    <a th:href="@{/tariffs/export/pdf}" class="btn btn-info col-4" th:text="#{tariff.export}"></a>
+    <br>
+    <div>
+        <a th:href="@{/tariffs/export/pdf}" class="btn btn-info col-4" th:text="#{tariff.export}"></a>
+        <br>
+    </div>
     <br>
     <div th:if="${param.success}">
         <div class="alert alert-success" th:text="#{subscribe.success}"></div>

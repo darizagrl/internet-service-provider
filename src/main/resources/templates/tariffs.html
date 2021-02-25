@@ -22,7 +22,10 @@
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{/showNewTariff}" class="btn btn-info col-4" th:text="#{tariff.add}"></a>
     </div>
+    <br>
+    <div>
     <a th:href="@{/tariffs/export/pdf}" class="btn btn-info col-4" th:text="#{tariff.export}"></a>
+    </div>
     <br>
     <div th:if="${param.success}">
         <div class="alert alert-success" th:text="#{subscribe.success}"></div>
