@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import springboot.dto.TariffDTO;
 import springboot.entity.Tariff;
 import springboot.entity.User;
+import springboot.service.ServicesService;
 import springboot.service.TariffService;
 import springboot.service.UserService;
 import springboot.service.impl.TariffSubscribingService;
@@ -36,12 +37,14 @@ public class TariffController {
     private final TariffService tariffService;
     private final UserService userService;
     private final TariffSubscribingService subscribingService;
+    private final ServicesService servicesService;
 
     @Autowired
-    public TariffController(TariffService tariffService, UserService userService, TariffSubscribingService subscribingService) {
+    public TariffController(TariffService tariffService, UserService userService, TariffSubscribingService subscribingService, ServicesService servicesService) {
         this.tariffService = tariffService;
         this.userService = userService;
         this.subscribingService = subscribingService;
+        this.servicesService = servicesService;
     }
 
     @GetMapping("/tariffs")
@@ -51,7 +54,8 @@ public class TariffController {
     }
 
     @GetMapping("{tab}")
-    public String tab(@PathVariable String tab, Model model) {
+    public String tab(@PathVariable String tab,
+                      Model model) {
         if (Arrays.asList("tab1", "tab2", "tab3")
                 .contains(tab)) {
             switch (tab) {
@@ -70,13 +74,16 @@ public class TariffController {
     }
 
     @GetMapping("/showNewTariff")
-    public String showNewTariff(@ModelAttribute("tariff") Tariff tariff) {
+    public String showNewTariff(@ModelAttribute("tariff") Tariff tariff, Model model) {
+        model.addAttribute("serviceList", servicesService.getAllServices());
         return "new_tariff";
     }
 
     @PostMapping("/saveTariff")
-    public String saveTariff(@Valid @ModelAttribute("tariff") TariffDTO tariffDTO, BindingResult result) {
+    public String saveTariff(@Valid @ModelAttribute("tariff") TariffDTO tariffDTO,
+                             BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("serviceList", servicesService.getAllServices());
             logger.error("Something was wrong with fields of the {} tariff", tariffDTO.getName());
             return "new_tariff";
         }
@@ -87,16 +94,17 @@ public class TariffController {
 
     @GetMapping("/edit_tariff/{id}")
     public String editTariff(@PathVariable(value = "id") int id, Model model) {
-        Tariff tariff = tariffService.tariffById(id);
-        model.addAttribute("tariff", tariff);
+        model.addAttribute("tariff", tariffService.tariffById(id));
+        model.addAttribute("serviceList", servicesService.getAllServices());
         return "update_tariff";
     }
 
     @PostMapping("/update_tariff/{id}")
     public String updateTariff(@PathVariable("id") int id, @Valid @ModelAttribute("tariff") TariffDTO tariffDTO,
-                               BindingResult result) {
+                               BindingResult result, Model model) {
         if (result.hasErrors()) {
             tariffDTO.setIdTariff(id);
+            model.addAttribute("serviceList", servicesService.getAllServices());
             logger.error("Something was wrong with fields of the {} tariff", tariffDTO.getName());
             return "update_tariff";
         }

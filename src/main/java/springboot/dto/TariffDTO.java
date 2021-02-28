@@ -8,18 +8,13 @@ public class TariffDTO {
     private Integer idTariff;
     @NotEmpty
     @NotBlank
-    @Pattern(regexp = "\\w{4,255}|\\p{L}{4,255}")
     private String name;
     private String description;
     @Min(0)
     @Max(1000)
     @NumberFormat
-    @NotEmpty
-    @NotBlank
     private double price;
-    @NotBlank
-    @NotEmpty
-    @Pattern(regexp = "\\w{3,255}|\\p{L}{3,255}")
+
     private String type;
 
     public Integer getIdTariff() {
@@ -61,4 +56,5 @@ public class TariffDTO {
     public void setType(String type) {
         this.type = type;
     }
+
 }

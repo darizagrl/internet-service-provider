@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface TariffRepo extends JpaRepository<Tariff, Integer> {
     Optional<Tariff> findByIdTariff(Integer id);
+
     List<Tariff> findByType(String type);
 }
