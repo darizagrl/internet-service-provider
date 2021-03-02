@@ -18,3 +18,7 @@ The user is automatically unlocked by depositing the required amount in the acco
 The system administrator has the rights to:
 - adding, deleting or editing a tariff plan;
 - registration, blocking and unlocking of the user.
+
+Database structure
+
+![db_structure](https://user-images.githubusercontent.com/31920567/109620522-a6b6fc00-7b42-11eb-9d69-dc221a1927aa.png)
