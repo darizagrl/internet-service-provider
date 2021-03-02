@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import springboot.entity.Account;
 
 @Repository
-public interface AccountRepo extends JpaRepository<Account, Integer> {
-}
+public interface AccountRepo extends JpaRepository<Account, Integer> {}

@@ -13,10 +13,7 @@ import java.util.Locale;
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/index").setViewName("index");;
-        registry.addViewController("/registration").setViewName("registration");
-        registry.addViewController("/tariffs").setViewName("tariffs");
-        registry.addViewController("/account").setViewName("account");
+        registry.addViewController("/index").setViewName("index");
     }
 
     @Bean
