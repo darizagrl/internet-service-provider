@@ -128,16 +128,19 @@ public class TariffController {
         if (user.get().isBlocked()) {
             logger.warn("User {} is blocked", user.get().getEmail());
             return "redirect:/tariffs?error_blocked";
+        }
+        if (user.get().getTariffs().contains(tariff)) {
+            logger.warn("User {} has tariff {}", user.get().getEmail(), tariff.getName());
+            return "redirect:/tariffs?error_exists";
+        }
+        if (user.get().getBalance() < tariff.getPrice()) {
+            subscribingService.subscribe(id, un);
+            logger.warn("User {} was blocked and subscribed to tariff {}", user.get().getEmail(), tariff.getName());
+            return "redirect:/tariffs?error";
         } else {
-            if (user.get().getBalance() < tariff.getPrice()) {
-                subscribingService.subscribe(id, un);
-                logger.warn("User {} was blocked and subscribed to tariff {}", user.get().getEmail(), tariff.getName());
-                return "redirect:/tariffs?error";
-            } else {
-                subscribingService.subscribe(id, un);
-                logger.info("User {} has subscribed to tariff {}", user.get().getEmail(), tariff.getName());
-                return "redirect:/tariffs?success";
-            }
+            subscribingService.subscribe(id, un);
+            logger.info("User {} has subscribed to tariff {}", user.get().getEmail(), tariff.getName());
+            return "redirect:/tariffs?success";
         }
     }
 

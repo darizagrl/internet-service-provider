@@ -36,6 +36,9 @@
     <div th:if="${param.error_blocked}">
         <div class="alert alert-danger" th:text="#{subscribe.error.blocked}"></div>
     </div>
+    <div th:if="${param.error_exists}">
+        <div class="alert alert-danger" th:text="#{subscribe.exists}"></div>
+    </div>
     <div class="container">
 
         <div class="row">

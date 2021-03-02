@@ -13,11 +13,11 @@ public class UserDTO {
     private Integer id;
     @NotEmpty
     @NotBlank
-    @Pattern(regexp = "\\p{L}{4,255}")
+    @Pattern(regexp = "[\\p{L}-]{2,255}")
     private String firstname;
     @NotEmpty
     @NotBlank
-    @Pattern(regexp = "\\p{L}{4,255}")
+    @Pattern(regexp = "\\p{L}{2,255}")
     private String lastname;
     @Email
     @NotEmpty

@@ -17,7 +17,7 @@
         <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/deleteTariff/{id}(id=${tariff.idTariff})}"
                                                      class="btn btn-danger" th:text="#{user.delete}"></a></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/edit_tariff/{id}(id=${tariff.idTariff})}"
-                                                     class="btn btn-danger"
+                                                     class="btn btn-primary"
                                                      th:text="#{user.update}"></a></td>
         <td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/subscribeTariff/{id}(id=${tariff.idTariff})}"
                                                     class="btn btn-info col-4" th:text="#{tariff.subscribe}"></a></td>
