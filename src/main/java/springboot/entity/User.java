@@ -34,7 +34,7 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "isblocked", nullable = false)
+    @Column(name = "isBlocked")
     private boolean isBlocked;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",

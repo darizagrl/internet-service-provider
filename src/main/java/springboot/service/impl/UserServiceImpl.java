@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
         user.setRoles(Collections.singletonList(new Role("ROLE_USER")));
+        user.setBlocked(false);
         user.setBalance(0.0);
         return userRepo.save(user);
     }

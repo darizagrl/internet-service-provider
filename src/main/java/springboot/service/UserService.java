@@ -3,11 +3,9 @@ package springboot.service;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import springboot.dto.UserDTO;
-import springboot.entity.Tariff;
 import springboot.entity.User;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface UserService extends UserDetailsService {
     User save(UserDTO userDTO);
