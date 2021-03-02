@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
     lastname  VARCHAR(255)        NOT NULL,
     email     VARCHAR(255) UNIQUE NOT NULL,
     password  VARCHAR(255)        NOT NULL,
-    balance NUMERIC
+    balance   NUMERIC
 );
 CREATE TABLE IF NOT EXISTS role
 (
@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS users_roles
     FOREIGN KEY (role_id) REFERENCES role (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-DROP table account;
 CREATE TABLE IF NOT EXISTS account
 (
     account_id INTEGER PRIMARY KEY,
@@ -34,9 +33,8 @@ CREATE TABLE IF NOT EXISTS account
 );
 CREATE TABLE IF NOT EXISTS service
 (
-    id          INTEGER PRIMARY KEY,
-    name        varchar(45)  NOT NULL,
-    description varchar(255) NOT NULL
+    id   INTEGER PRIMARY KEY,
+    name varchar(45) UNIQUE
 );
 CREATE TABLE IF NOT EXISTS tariff
 (
@@ -44,7 +42,8 @@ CREATE TABLE IF NOT EXISTS tariff
     name        varchar(45)  NOT NULL,
     description varchar(255) NOT NULL,
     price       NUMERIC      NOT NULL,
-    type        varchar      not null
+    type        varchar      not null,
+    FOREIGN KEY (type) REFERENCES service (name)
 );
 CREATE TABLE IF NOT EXISTS users_tariffs
 (
